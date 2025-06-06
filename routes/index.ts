@@ -1,37 +1,49 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import parsePDFtoEasy from '../parser/parsePDFtoEasy';
+import parsePDFtoEasy from '../parsePDFtoEasy.js'; // gebruik de werkende JS-versie
+
+// Eigen type zodat TypeScript weet dat req.file bestaat
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
-router.get('/', (req, res) => {
-  res.send('API is live op Render!');
+// Test endpoint om te checken of backend draait
+router.get('/', (_req: Request, res: Response) => {
+  res.send('✅ API draait op Render');
 });
 
-router.get('/mailtest', async (req, res) => {
+// Mailtest (dummy)
+router.get('/mailtest', (_req: Request, res: Response) => {
   res.send('✅ Mail verstuurd!');
 });
 
-router.post('/upload', upload.single('file'), async (req, res) => {
+// Upload en verwerk PDF naar .easy bestand
+router.post('/upload', upload.single('file'), async (req: MulterRequest, res: Response) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Geen bestand geüpload.' });
+    }
+
     const pdfPath = req.file.path;
     const outputDir = path.join(__dirname, '../easyfiles');
 
     const resultaat = await parsePDFtoEasy(pdfPath, outputDir);
 
-    fs.unlinkSync(pdfPath); // verwijder tijdelijke PDF
+    fs.unlinkSync(pdfPath); // verwijder tijdelijk PDF-bestand
 
     res.json({
       message: '✅ PDF verwerkt en EASY bestand aangemaakt!',
       referentie: resultaat.referentie,
-      bestand: resultaat.bestandsnaam
+      bestand: resultaat.bestandsnaam,
     });
   } catch (err: any) {
-    console.error('❌ Fout bij verwerken:', err.message);
-    res.status(400).json({ error: err.message });
+    console.error('❌ Verwerkingsfout:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
