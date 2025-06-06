@@ -6,23 +6,14 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "axios": "^1.9.0",
-    "body-parser": "^1.20.2",
-    "date-fns": "^4.1.0",
-    "express": "^4.18.2",
-    "form-data-encoder": "^4.1.0",
-    "formdata-node": "^6.0.3",
-    "imapflow": "^1.0.187",
-    "mailparser": "^3.7.3",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "nodemailer": "^7.0.3",
-    "pdf-parse": "^1.1.1",
-    "typescript": "^5.2.2",
-    "undici": "^7.10.0"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.4.2",
-    "@types/nodemailer": "^6.4.17",
-    "dotenv": "^16.5.0"
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.30",
+    "@types/nodemailer": "^6.4.17"
   }
 }
