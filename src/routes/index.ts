@@ -12,19 +12,17 @@ router.get('/', (_req: Request, res: Response) => {
 });
 
 router.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+  const file = req.file as Express.Multer.File | undefined;
+  if (!file) {
+    return res.status(400).json({ error: 'Geen bestand geüpload.' });
+  }
+
+  const pdfPath = file.path;
+  const outputDir = path.resolve('easyfiles');
+
   try {
-    const file = req.file as Express.Multer.File | undefined;
-    if (!file) {
-      return res.status(400).json({ error: 'Geen bestand geüpload.' });
-    }
-
-    const pdfPath = file.path;
-    const outputDir = path.resolve('easyfiles');
-
     const resultaat = await parsePDFtoEasy(pdfPath, outputDir);
-
     fs.unlinkSync(pdfPath);
-
     res.json({
       message: '✅ PDF verwerkt!',
       referentie: resultaat.referentie,

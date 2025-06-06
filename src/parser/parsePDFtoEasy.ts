@@ -5,7 +5,6 @@ export default async function parsePDFtoEasy(
   pdfPath: string,
   outputDir: string
 ): Promise<{ referentie: string; bestandsnaam: string }> {
-  // TODO: hier komt straks echte parsing
   const parsedXML = buildEasyXML({
     referentie: 'TEST123',
     klantnaam: 'Jordex',
