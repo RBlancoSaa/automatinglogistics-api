@@ -2,47 +2,37 @@ import express, { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import parsePDFtoEasy from '../parsePDFtoEasy.js'; // gebruik de werkende JS-versie
-
-// Eigen type zodat TypeScript weet dat req.file bestaat
-interface MulterRequest extends Request {
-  file: Express.Multer.File;
-}
+import parsePDFtoEasy from '../parser/parsePDFtoEasy';
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
-// Test endpoint om te checken of backend draait
 router.get('/', (_req: Request, res: Response) => {
-  res.send('✅ API draait op Render');
+  res.send('✅ API draait op Render met TypeScript');
 });
 
-// Mailtest (dummy)
-router.get('/mailtest', (_req: Request, res: Response) => {
-  res.send('✅ Mail verstuurd!');
-});
-
-// Upload en verwerk PDF naar .easy bestand
-router.post('/upload', upload.single('file'), async (req: MulterRequest, res: Response) => {
+router.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
+    // Check of req.file bestaat en maak dan een type assertion
+    const file = req.file as Express.Multer.File | undefined;
+    if (!file) {
       return res.status(400).json({ error: 'Geen bestand geüpload.' });
     }
 
-    const pdfPath = req.file.path;
-    const outputDir = path.join(__dirname, '../easyfiles');
+    const pdfPath = file.path;
+    const outputDir = path.resolve('easyfiles');
 
     const resultaat = await parsePDFtoEasy(pdfPath, outputDir);
 
-    fs.unlinkSync(pdfPath); // verwijder tijdelijk PDF-bestand
+    fs.unlinkSync(pdfPath); // Verwijder tijdelijk PDF-bestand
 
     res.json({
-      message: '✅ PDF verwerkt en EASY bestand aangemaakt!',
+      message: '✅ PDF verwerkt!',
       referentie: resultaat.referentie,
       bestand: resultaat.bestandsnaam,
     });
   } catch (err: any) {
-    console.error('❌ Verwerkingsfout:', err.message);
+    console.error('❌ Fout:', err.message);
     res.status(500).json({ error: err.message });
   }
 });

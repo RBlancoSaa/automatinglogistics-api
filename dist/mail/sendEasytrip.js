@@ -1,34 +1,28 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEasytripMail = void 0;
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const nodemailer_1 = __importDefault(require("nodemailer"));
-const dotenv_1 = __importDefault(require("dotenv"));
+import fs from 'fs';
+import path from 'path';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 // Altijd .env uit de root laden — werkt zowel in src/ als dist/
-const envPath = path_1.default.resolve(__dirname, __dirname.includes('dist') ? '../../.env' : '../.env');
-dotenv_1.default.config({ path: envPath });
+const envPath = path.resolve(__dirname, __dirname.includes('dist') ? '../../.env' : '../.env');
+dotenv.config({ path: envPath });
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, TO_EMAIL } = process.env;
 if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !FROM_EMAIL || !TO_EMAIL) {
     throw new Error('❌ SMTP-configuratie ontbreekt in .env bestand');
 }
-const sendEasytripMail = async () => {
+export const sendEasytripMail = async () => {
     try {
-        const uploadsDir = path_1.default.resolve(__dirname, __dirname.includes('dist') ? '../../uploads' : '../uploads');
-        const files = fs_1.default.readdirSync(uploadsDir);
+        const uploadsDir = path.resolve(__dirname, __dirname.includes('dist') ? '../../uploads' : '../uploads');
+        const files = fs.readdirSync(uploadsDir);
         const pdfFile = files.find(f => f.toLowerCase().endsWith('.pdf'));
         const easyFile = files.find(f => f.toLowerCase().endsWith('.easy'));
         if (!pdfFile || !easyFile) {
             throw new Error('❌ Vereiste bestanden (.pdf en .easy) niet gevonden in uploads-map');
         }
-        const pdfPath = path_1.default.join(uploadsDir, pdfFile);
-        const easyPath = path_1.default.join(uploadsDir, easyFile);
+        const pdfPath = path.join(uploadsDir, pdfFile);
+        const easyPath = path.join(uploadsDir, easyFile);
         console.log('📂 PDF:', pdfPath);
         console.log('📂 EASY:', easyPath);
-        const transporter = nodemailer_1.default.createTransport({
+        const transporter = nodemailer.createTransport({
             host: SMTP_HOST,
             port: parseInt(SMTP_PORT),
             secure: parseInt(SMTP_PORT) === 465, // true for 465, false for 587
@@ -54,4 +48,3 @@ const sendEasytripMail = async () => {
         console.error('❌ Fout bij verzenden:', error.message);
     }
 };
-exports.sendEasytripMail = sendEasytripMail;

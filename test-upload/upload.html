@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF Upload Test met Drag & Drop</title>
+  <style>
+    #dropZone {
+      width: 300px;
+      height: 150px;
+      border: 3px dashed #888;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    #dropZone.dragover {
+      border-color: #4c372d;
+      background-color: #f0e9e3;
+      color: #4c372d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload een PDF naar de backend</h1>
+
+  <div id="dropZone">Sleep hier je PDF bestand naartoe</div>
+
+  <form id="uploadForm">
+    <input type="file" name="file" accept=".pdf" required />
+    <button type="submit">Uploaden</button>
+  </form>
+
+  <pre id="response"></pre>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const form = document.getElementById('uploadForm');
+    const fileInput = form.querySelector('input[type="file"]');
+    const responseEl = document.getElementById('response');
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0 && files[0].type === 'application/pdf') {
+        fileInput.files = files;
+        dropZone.textContent = `Geselecteerd bestand: ${files[0].name}`;
+      } else {
+        alert('Alleen PDF-bestanden zijn toegestaan.');
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!fileInput.files.length) {
+        alert('Selecteer eerst een PDF bestand.');
+        return;
+      }
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('http://localhost:3000/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        responseEl.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        responseEl.textContent = 'Fout bij upload: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>

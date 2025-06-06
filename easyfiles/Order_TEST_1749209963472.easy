@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order>
+  <Referentie>TEST123</Referentie>
+  <Klant>Jordex</Klant>
+  <ContainerType>45G1</ContainerType>
+  <Boot>Maersk Example</Boot>
+  <Vertrek>Rotterdam</Vertrek>
+  <Bestemming>Hamburg</Bestemming>
+</Order>

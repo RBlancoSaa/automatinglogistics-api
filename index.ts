@@ -1,17 +1,14 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import routes from './routes';
 import cors from 'cors';
-
-dotenv.config();
+import router from './routes/index.js'; // gebruik .js hier na build
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/', routes);
+app.use('/api', router);
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Backend running on port ${PORT}`);
+  console.log(`✅ Server draait op poort ${PORT}`);
 });
