@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Order>
+<Dossiers>
+  <Dossier>
+    <Opdrachtgever>
+      <Opdrachtgever>Jordex Shipping & Forwarding B.V.</Opdrachtgever>
+      <Opdrachtgever_Adres>Ambachtsweg 6</Opdrachtgever_Adres>
+      <Opdrachtgever_Postcode>3161 GL</Opdrachtgever_Postcode>
+      <Opdrachtgever_Plaats>Rhoon</Opdrachtgever_Plaats>
+      <Opdrachtgever_TelefoonNummer>+31 (0)10 303 7303</Opdrachtgever_TelefoonNummer>
+      <Opdrachtgever_Email>info@jordex.com</Opdrachtgever_Email>
+      <Opdrachtgever_BTW>NL815340011B01</Opdrachtgever_BTW>
+      <Opdrachtgever_KVK>24390991</Opdrachtgever_KVK>
+    </Opdrachtgever>
+    <Container>
+      <Ritnr>OE2517768</Ritnr>
+      <Laden_Lossen>Laden</Laden_Lossen>
+      <Type>Export</Type>
+      <Bootnaam>ONE OLYMPUS</Bootnaam>
+      <Rederij>YANG MING - YMJA</Rederij>
+      <Bestemming>Tokyo</Bestemming>
+      <Uithaalreferentie>YMFRTM0251259</Uithaalreferentie>
+      <Laad_Los_Referentie>608897</Laad_Los_Referentie>
+      <Inleverreferentie>YMFRTM0251259</Inleverreferentie>
+      <Bijzonderheden>Container kan pas kosteloos worden uitgehaald op 10 Juni!!</Bijzonderheden>
+      <Datum>10 Jun 2025</Datum>
+      <Tijd>11:30</Tijd>
+      <Temperatuur>-20</Temperatuur>
+      <Volume>0</Volume>
+      <Gewicht>0</Gewicht>
+      <Colli>0</Colli>
+      <Lading>40' high cube reefer050m³26000kgFROZEN PORK</Lading>
+      <ADR>NEE</ADR>
+    </Container>
+    <Locaties>
+
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Opzetten</Actie>
+        <Naam>CETEM Containers</Naam>
+        <Adres>(CETEM)
+Westgeulstraat 6</Adres>
+        <Postcode>3197 LD</Postcode>
+        <Plaats>ROTTERDAM</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Laden</Actie>
+        <Naam>Distrifresh Den Bosch</Naam>
+        <Adres>Goudenheuvel 51</Adres>
+        <Postcode>5234GA</Postcode>
+        <Plaats>s-Hertogenbosch</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Inleveren</Actie>
+        <Naam>ECT Delta Terminal</Naam>
+        <Adres>Europaweg 875</Adres>
+        <Postcode>3199 LD</Postcode>
+        <Plaats>ROTTERDAM-</Plaats>
+      </Locatie>
+    </Locaties>
+    <Financieel>
+      <Vracht>0</Vracht>
+      <Vracht_Betaalwijze>vv</Vracht_Betaalwijze>
+      <Valuta>EUR</Valuta>
+      <BTW>0</BTW>
+    </Financieel>
+  </Dossier>
+</Dossiers>
+</Order>

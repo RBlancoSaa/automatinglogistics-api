@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Order>
+<Dossiers>
+  <Dossier>
+    <Opdrachtgever>
+      <Opdrachtgever>Jordex Shipping & Forwarding B.V.</Opdrachtgever>
+      <Opdrachtgever_Adres>Ambachtsweg 6</Opdrachtgever_Adres>
+      <Opdrachtgever_Postcode>3161 GL</Opdrachtgever_Postcode>
+      <Opdrachtgever_Plaats>Rhoon</Opdrachtgever_Plaats>
+      <Opdrachtgever_TelefoonNummer>+31 (0)10 303 7303</Opdrachtgever_TelefoonNummer>
+      <Opdrachtgever_Email>info@jordex.com</Opdrachtgever_Email>
+      <Opdrachtgever_BTW>NL815340011B01</Opdrachtgever_BTW>
+      <Opdrachtgever_KVK>24390991</Opdrachtgever_KVK>
+    </Opdrachtgever>
+    <Container>
+      <Ritnr>OE2515943</Ritnr>
+      <Laden_Lossen>Laden</Laden_Lossen>
+      <Type>Export</Type>
+      <Bootnaam>HSL NIKE</Bootnaam>
+      <Rederij>YANG MING - YMJA</Rederij>
+      <Bestemming>Mersin</Bestemming>
+      <Uithaalreferentie>YMFRTM0250657</Uithaalreferentie>
+      <Laad_Los_Referentie>undefined</Laad_Los_Referentie>
+      <Inleverreferentie>YMFRTM0250657</Inleverreferentie>
+      <Bijzonderheden></Bijzonderheden>
+      <Datum>11 Jun 2025</Datum>
+      <Tijd>07:30</Tijd>
+      <Temperatuur></Temperatuur>
+      <Volume>0</Volume>
+      <Gewicht>0</Gewicht>
+      <Colli>0</Colli>
+      <Lading>20' container00m³21000kgFertilizers</Lading>
+      <ADR>NEE</ADR>
+    </Container>
+    <Locaties>
+
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Opzetten</Actie>
+        <Naam>RCT / Kramer Delta</Naam>
+        <Adres>Missouriweg 17-30</Adres>
+        <Postcode>3199LB</Postcode>
+        <Plaats>ROTTERDAM</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Laden</Actie>
+        <Naam>Transterminal Dordrecht</Naam>
+        <Adres>B.V.
+Kreekweg 11</Adres>
+        <Postcode>3316 BD</Postcode>
+        <Plaats>Dordrecht</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Inleveren</Actie>
+        <Naam>RST Noordzijde (RSTNO)</Naam>
+        <Adres>Reeweg 35 3089 KM</Adres>
+        <Postcode>3089 KM</Postcode>
+        <Plaats>ROTTERDAM</Plaats>
+      </Locatie>
+    </Locaties>
+    <Financieel>
+      <Vracht>0</Vracht>
+      <Vracht_Betaalwijze>vv</Vracht_Betaalwijze>
+      <Valuta>EUR</Valuta>
+      <BTW>0</BTW>
+    </Financieel>
+  </Dossier>
+</Dossiers>
+</Order>

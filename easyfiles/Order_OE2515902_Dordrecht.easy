@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Order>
+<Dossiers>
+  <Dossier>
+    <Opdrachtgever>
+      <Opdrachtgever>Jordex Shipping & Forwarding B.V.</Opdrachtgever>
+      <Opdrachtgever_Adres>Ambachtsweg 6</Opdrachtgever_Adres>
+      <Opdrachtgever_Postcode>3161 GL</Opdrachtgever_Postcode>
+      <Opdrachtgever_Plaats>Rhoon</Opdrachtgever_Plaats>
+      <Opdrachtgever_TelefoonNummer>+31 (0)10 303 7303</Opdrachtgever_TelefoonNummer>
+      <Opdrachtgever_Email>info@jordex.com</Opdrachtgever_Email>
+      <Opdrachtgever_BTW>NL815340011B01</Opdrachtgever_BTW>
+      <Opdrachtgever_KVK>24390991</Opdrachtgever_KVK>
+    </Opdrachtgever>
+    <Container>
+      <Ritnr>OE2515902</Ritnr>
+      <Laden_Lossen>Laden</Laden_Lossen>
+      <Type>Export</Type>
+      <Bootnaam>AL MURAYKH</Bootnaam>
+      <Rederij>MAERSK - MAEU</Rederij>
+      <Bestemming>Jawaharlal Nehru (Nhava</Bestemming>
+      <Uithaalreferentie>undefined</Uithaalreferentie>
+      <Laad_Los_Referentie>254178</Laad_Los_Referentie>
+      <Inleverreferentie>undefined</Inleverreferentie>
+      <Bijzonderheden></Bijzonderheden>
+      <Datum>10 Jun 2025</Datum>
+      <Tijd>10:00</Tijd>
+      <Temperatuur></Temperatuur>
+      <Volume>0</Volume>
+      <Gewicht>0</Gewicht>
+      <Colli>0</Colli>
+      <Lading>20' container00m³24000kgFERTILIZER</Lading>
+      <ADR>NEE</ADR>
+    </Container>
+    <Locaties>
+
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Opzetten</Actie>
+        <Naam>UWT Depot 2</Naam>
+        <Adres>Bunschotenweg 122-200</Adres>
+        <Postcode>3089 KC</Postcode>
+        <Plaats>ROTTERDAM</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Laden</Actie>
+        <Naam>Transterminal Dordrecht</Naam>
+        <Adres>B.V.
+Kreekweg 11</Adres>
+        <Postcode>3316 BD</Postcode>
+        <Plaats>Dordrecht</Plaats>
+      </Locatie>
+      <Locatie>
+        <Volgorde>0</Volgorde>
+        <Actie>Inleveren</Actie>
+        <Naam>APM Terminals Rotterdam</Naam>
+        <Adres>II (0APMA)
+Europaweg 910</Adres>
+        <Postcode>3199LC</Postcode>
+        <Plaats>ROTTERDAM</Plaats>
+      </Locatie>
+    </Locaties>
+    <Financieel>
+      <Vracht>0</Vracht>
+      <Vracht_Betaalwijze>vv</Vracht_Betaalwijze>
+      <Valuta>EUR</Valuta>
+      <BTW>0</BTW>
+    </Financieel>
+  </Dossier>
+</Dossiers>
+</Order>
