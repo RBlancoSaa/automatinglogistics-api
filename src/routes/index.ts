@@ -13,7 +13,6 @@ router.get('/', (_req: Request, res: Response) => {
 
 router.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
   try {
-    // Check of req.file bestaat en maak dan een type assertion
     const file = req.file as Express.Multer.File | undefined;
     if (!file) {
       return res.status(400).json({ error: 'Geen bestand geüpload.' });
@@ -24,7 +23,7 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
 
     const resultaat = await parsePDFtoEasy(pdfPath, outputDir);
 
-    fs.unlinkSync(pdfPath); // Verwijder tijdelijk PDF-bestand
+    fs.unlinkSync(pdfPath);
 
     res.json({
       message: '✅ PDF verwerkt!',
