@@ -1,22 +1,28 @@
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import parsePDFtoEasy from '../parser/parsePDFtoEasy.js';
-const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const parsePDFtoEasy_1 = __importDefault(require("../parser/parsePDFtoEasy"));
+const router = express_1.default.Router();
+const upload = (0, multer_1.default)({ dest: 'uploads/' });
 router.get('/', (_req, res) => {
     res.send('✅ API draait op Render met TypeScript');
 });
 router.post('/upload', upload.single('file'), async (req, res) => {
+    const file = req.file;
+    if (!file) {
+        return res.status(400).json({ error: 'Geen bestand geüpload.' });
+    }
+    const pdfPath = file.path;
+    const outputDir = path_1.default.resolve('easyfiles');
     try {
-        if (!req.file) {
-            return res.status(400).json({ error: 'Geen bestand geüpload.' });
-        }
-        const pdfPath = req.file.path;
-        const outputDir = path.resolve('easyfiles');
-        const resultaat = await parsePDFtoEasy(pdfPath, outputDir);
-        fs.unlinkSync(pdfPath);
+        const resultaat = await (0, parsePDFtoEasy_1.default)(pdfPath, outputDir);
+        fs_1.default.unlinkSync(pdfPath);
         res.json({
             message: '✅ PDF verwerkt!',
             referentie: resultaat.referentie,
@@ -28,4 +34,4 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-export default router;
+exports.default = router;
