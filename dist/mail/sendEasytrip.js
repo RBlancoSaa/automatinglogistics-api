@@ -8,15 +8,16 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
-// Zorg dat .env uit de root correct geladen wordt
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
+// Altijd .env uit de root laden — werkt zowel in src/ als dist/
+const envPath = path_1.default.resolve(__dirname, __dirname.includes('dist') ? '../../.env' : '../.env');
+dotenv_1.default.config({ path: envPath });
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, TO_EMAIL } = process.env;
 if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !FROM_EMAIL || !TO_EMAIL) {
     throw new Error('❌ SMTP-configuratie ontbreekt in .env bestand');
 }
 const sendEasytripMail = async () => {
     try {
-        const uploadsDir = path_1.default.resolve(__dirname, '../uploads');
+        const uploadsDir = path_1.default.resolve(__dirname, __dirname.includes('dist') ? '../../uploads' : '../uploads');
         const files = fs_1.default.readdirSync(uploadsDir);
         const pdfFile = files.find(f => f.toLowerCase().endsWith('.pdf'));
         const easyFile = files.find(f => f.toLowerCase().endsWith('.easy'));
@@ -42,14 +43,8 @@ const sendEasytripMail = async () => {
             subject: `Easytrip export: ${easyFile}`,
             text: 'Bijgevoegd: PDF + EASY bestand',
             attachments: [
-                {
-                    filename: pdfFile,
-                    path: pdfPath
-                },
-                {
-                    filename: easyFile,
-                    path: easyPath
-                }
+                { filename: pdfFile, path: pdfPath },
+                { filename: easyFile, path: easyPath }
             ]
         };
         const info = await transporter.sendMail(mailOptions);

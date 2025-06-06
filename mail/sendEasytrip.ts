@@ -3,8 +3,9 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
-// Zorg dat .env uit de root correct geladen wordt
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+// Altijd .env uit de root laden — werkt zowel in src/ als dist/
+const envPath = path.resolve(__dirname, __dirname.includes('dist') ? '../../.env' : '../.env');
+dotenv.config({ path: envPath });
 
 const {
   SMTP_HOST,
@@ -21,7 +22,7 @@ if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !FROM_EMAIL || !TO_E
 
 export const sendEasytripMail = async () => {
   try {
-    const uploadsDir = path.resolve(__dirname, '../uploads');
+    const uploadsDir = path.resolve(__dirname, __dirname.includes('dist') ? '../../uploads' : '../uploads');
     const files = fs.readdirSync(uploadsDir);
 
     const pdfFile = files.find(f => f.toLowerCase().endsWith('.pdf'));
@@ -53,14 +54,8 @@ export const sendEasytripMail = async () => {
       subject: `Easytrip export: ${easyFile}`,
       text: 'Bijgevoegd: PDF + EASY bestand',
       attachments: [
-        {
-          filename: pdfFile,
-          path: pdfPath
-        },
-        {
-          filename: easyFile,
-          path: easyPath
-        }
+        { filename: pdfFile, path: pdfPath },
+        { filename: easyFile, path: easyPath }
       ]
     };
 
