@@ -5,42 +5,22 @@ export default async function parsePDFtoEasy(
   pdfPath: string,
   outputDir: string
 ): Promise<{ referentie: string; bestandsnaam: string }> {
-  const parsedXML = buildEasyXML({
-    referentie: 'TEST123',
-    klantnaam: 'Jordex',
-    containerType: '45G1',
-    bootnaam: 'Maersk Example',
-    vertrek: 'Rotterdam',
-    bestemming: 'Hamburg',
-  });
+  // TODO: Hier echte PDF uitlezing + XML genereren
 
-  const bestandsnaam = `Order_TEST_${Date.now()}.easy`;
+  const xmlContent = `<Order>
+    <Referentie>REF123456</Referentie>
+    <Klant>Jordex</Klant>
+    <ContainerType>45G1</ContainerType>
+    <Bootnaam>Maersk Example</Bootnaam>
+    <Vertrek>Rotterdam</Vertrek>
+    <Bestemming>Hamburg</Bestemming>
+  </Order>`;
+
+  const bestandsnaam = `Order_${Date.now()}.easy`;
   const outputPath = path.join(outputDir, bestandsnaam);
 
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(outputPath, parsedXML, 'utf-8');
+  fs.writeFileSync(outputPath, xmlContent, 'utf-8');
 
-  return {
-    referentie: 'TEST123',
-    bestandsnaam,
-  };
-}
-
-function buildEasyXML(data: {
-  referentie: string;
-  klantnaam: string;
-  containerType: string;
-  bootnaam: string;
-  vertrek: string;
-  bestemming: string;
-}): string {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<Order>
-  <Referentie>${data.referentie}</Referentie>
-  <Klant>${data.klantnaam}</Klant>
-  <ContainerType>${data.containerType}</ContainerType>
-  <Boot>${data.bootnaam}</Boot>
-  <Vertrek>${data.vertrek}</Vertrek>
-  <Bestemming>${data.bestemming}</Bestemming>
-</Order>`;
+  return { referentie: 'REF123456', bestandsnaam };
 }
