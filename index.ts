@@ -1,14 +1,14 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import routes from './routes';
+import cors from 'cors';
 
 dotenv.config();
-const app = express();
-app.use(express.json({ limit: '10mb' }));
-app.get('/', (req, res) => {
-  res.send('✅ API is live op Render!');
-});
 
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 app.use('/', routes);
 
 const PORT = process.env.PORT || 3000;
