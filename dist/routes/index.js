@@ -11,18 +11,17 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const parsePDFtoEasy_1 = __importDefault(require("../parser/parsePDFtoEasy"));
 const router = express_1.default.Router();
 const upload = (0, multer_1.default)({ dest: 'uploads/' });
-// Nodemailer transporter met jouw .env gegevens
 const transporter = nodemailer_1.default.createTransport({
-    host: process.env.SMTP_HOST, // bijv. smtp.jouwdomein.nl
-    port: Number(process.env.SMTP_PORT), // bijv. 587
-    secure: false, // true als je SSL gebruikt (meestal false met poort 587)
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: false,
     auth: {
-        user: process.env.SMTP_USER, // jouw e-mail adres uit .env
-        pass: process.env.SMTP_PASS, // jouw wachtwoord uit .env
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
     },
 });
 router.get('/', (_req, res) => {
-    res.send('✅ API draait op Render met TypeScript en nodemailer');
+    res.send('✅ API draait');
 });
 router.post('/upload', upload.single('file'), async (req, res) => {
     try {
@@ -31,12 +30,10 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         }
         const pdfPath = req.file.path;
         const outputDir = path_1.default.resolve('easyfiles');
-        // Parse PDF en maak .easy bestand
         const resultaat = await (0, parsePDFtoEasy_1.default)(pdfPath, outputDir);
-        // Mail versturen met PDF + .easy als bijlage
         const mailOptions = {
             from: `"Automation Logistics" <${process.env.SMTP_USER}>`,
-            to: process.env.MAIL_RECEIVER, // wie ontvangt het? Vul in .env (bijv. jouw mailadres)
+            to: process.env.EMAIL_RECEIVER,
             subject: `Nieuwe transportopdracht: ${resultaat.referentie}`,
             text: `Er is een nieuwe transportopdracht binnengekomen met referentie ${resultaat.referentie}. Zie bijlagen.`,
             attachments: [
@@ -45,16 +42,15 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             ],
         };
         await transporter.sendMail(mailOptions);
-        // Tijdelijke PDF verwijderen
         fs_1.default.unlinkSync(pdfPath);
         res.json({
-            message: '✅ PDF verwerkt en mail verzonden!',
+            message: '✅ Verwerkt en verzonden',
             referentie: resultaat.referentie,
             bestand: resultaat.bestandsnaam,
         });
     }
     catch (err) {
-        console.error('❌ Fout:', err.message);
+        console.error(err);
         res.status(500).json({ error: err.message });
     }
 });
