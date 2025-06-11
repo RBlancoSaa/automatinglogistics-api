@@ -1,13 +1,15 @@
-import { IncomingForm, Files } from 'formidable';
+import { IncomingForm, type Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import type { IncomingMessage, ServerResponse } from 'http';
 
-import { parsePDFtoEasy } from '../utils/readPdf';
-import { sendMail } from '../utils/sendViaSMTP';
+import { parsePDFtoEasy } from '../src/utils/readPdf';
+import { sendMail } from '../src/utils/sendViaSMTP';
 
 export const config = {
-  api: { bodyParser: false },
+  api: {
+    bodyParser: false,
+  },
 };
 
 export default function handler(req: IncomingMessage, res: ServerResponse) {
@@ -20,9 +22,9 @@ export default function handler(req: IncomingMessage, res: ServerResponse) {
 
   const form = new IncomingForm({ uploadDir: '/tmp', keepExtensions: true });
 
-  form.parse(req, async (err: Error | null, fields: any, files: Files) => {
+  form.parse(req, async (err: any, fields: any, files: Files) => {
     if (err) {
-      console.error('❌ Parse error:', err);
+      console.error('❌ Fout bij inlezen formulier:', err);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ error: 'Parse error' }));
@@ -59,15 +61,12 @@ export default function handler(req: IncomingMessage, res: ServerResponse) {
           referentie: resultaat.referentie,
         })
       );
-    } catch (error: any) {
+    } catch (e: unknown) {
+      const error = e instanceof Error ? e.message : 'Onbekende fout';
       console.error('❌ Verwerkingsfout:', error);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(
-        JSON.stringify({
-          error: error?.message || 'Er ging iets mis bij het verwerken',
-        })
-      );
+      res.end(JSON.stringify({ error }));
     }
   });
 }
