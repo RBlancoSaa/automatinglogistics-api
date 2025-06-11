@@ -1,34 +1,41 @@
 import { IncomingForm, Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-import parsePDFtoEasy from '../../utils/readPdf';
-import sendViaSMTP from '../../utils/sendViaSMTP';
+import { parsePDFtoEasy } from '../utils/readPdf';
+import { sendMail } from '../utils/sendViaSMTP';
 
 export const config = {
-  api: {
-    bodyParser: false
-  }
+  api: { bodyParser: false },
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    res.statusCode = 405;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+    return;
   }
 
   const form = new IncomingForm({ uploadDir: '/tmp', keepExtensions: true });
 
-  form.parse(req, async (err: any, fields: any, files: Files) => {
+  form.parse(req, async (err: Error | null, fields: any, files: Files) => {
     if (err) {
-      console.error('❌ Parse-fout:', err);
-      return res.status(500).json({ error: 'Parse error' });
+      console.error('❌ Parse error:', err);
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'Parse error' }));
+      return;
     }
 
     const file = files.file as unknown as { filepath: string };
 
     if (!file?.filepath || Array.isArray(file)) {
-      return res.status(400).json({ error: 'Geen geldig bestand ontvangen' });
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'Geen geldig bestand ontvangen' }));
+      return;
     }
 
     const tempPath = file.filepath;
@@ -38,28 +45,29 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const resultaat = await parsePDFtoEasy(tempPath, outputDir);
 
-      await sendViaSMTP({
-        to: process.env.FROM_EMAIL!,
-        subject: `Easytrip-bestand: ${resultaat.referentie}`,
-        attachments: [
-          {
-            filename: `${resultaat.referentie}.easy`,
-            path: path.join(outputDir, resultaat.bestandsnaam)
-          },
-          {
-            filename: `${resultaat.referentie}.pdf`,
-            path: tempPath
-          }
-        ]
+      await sendMail({
+        pdfPath: tempPath,
+        easyPath: path.join(outputDir, resultaat.bestandsnaam),
+        referentie: resultaat.referentie,
       });
 
-      return res.status(200).json({
-        message: '✅ Verwerkt & verstuurd',
-        referentie: resultaat.referentie
-      });
-    } catch (error: unknown) {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(
+        JSON.stringify({
+          message: '✅ Verwerkt & verstuurd',
+          referentie: resultaat.referentie,
+        })
+      );
+    } catch (error: any) {
       console.error('❌ Verwerkingsfout:', error);
-      return res.status(500).json({ error: (error as Error).message || 'Verwerkingsfout' });
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(
+        JSON.stringify({
+          error: error?.message || 'Er ging iets mis bij het verwerken',
+        })
+      );
     }
   });
 }
