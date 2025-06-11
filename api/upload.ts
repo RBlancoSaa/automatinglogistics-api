@@ -1,22 +1,43 @@
-import { IncomingForm } from 'formidable';
+import { IncomingForm, Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import { parsePDFtoEasy } from '../utils/readPdf';
 import { sendMail } from '../utils/sendViaSMTP';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-export const config = { api: { bodyParser: false } };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default function handler(req, res) {
+export default function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    res.statusCode = 405;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+    return;
   }
 
   const form = new IncomingForm({ uploadDir: '/tmp', keepExtensions: true });
 
-  form.parse(req, async (err, fields, files) => {
-    if (err) return res.status(500).json({ error: 'Parse error' });
-    const file = files.file;
-    if (!file || Array.isArray(file)) return res.status(400).json({ error: 'Geen bestand' });
+  form.parse(req, async (err: Error | null, fields: any, files: Files) => {
+    if (err) {
+      console.error('❌ Parse error:', err);
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'Parse error' }));
+      return;
+    }
+
+    const file = files.file as unknown as { filepath: string };
+
+    if (!file?.filepath || Array.isArray(file)) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'Geen geldig bestand ontvangen' }));
+      return;
+    }
 
     const tempPath = file.filepath;
     const outputDir = path.join(process.cwd(), 'easyfiles');
@@ -24,15 +45,26 @@ export default function handler(req, res) {
 
     try {
       const resultaat = await parsePDFtoEasy(tempPath, outputDir);
+
       await sendMail({
         pdfPath: tempPath,
         easyPath: path.join(outputDir, resultaat.bestandsnaam),
         referentie: resultaat.referentie,
       });
 
-      res.status(200).json({ message: '✅ Gelukt', referentie: resultaat.referentie });
-    } catch (e) {
-      res.status(500).json({ error: e.message });
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(
+        JSON.stringify({
+          message: '✅ Verwerkt & verstuurd',
+          referentie: resultaat.referentie,
+        })
+      );
+    } catch (e: any) {
+      console.error('❌ Verwerkingsfout:', e);
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: e.message || 'Interne fout' }));
     }
   });
 }
