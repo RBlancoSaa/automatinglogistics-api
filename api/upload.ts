@@ -1,13 +1,14 @@
 import { IncomingForm, Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
+import type { IncomingMessage, ServerResponse } from 'http';
+
 import { parsePDFtoEasy } from '../utils/readPdf';
 import { sendMail } from '../utils/sendViaSMTP';
-import type { IncomingMessage, ServerResponse } from 'http';
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false, // nodig om form.parse te kunnen gebruiken
   },
 };
 
@@ -23,7 +24,7 @@ export default function handler(req: IncomingMessage, res: ServerResponse) {
 
   form.parse(req, async (err: Error | null, fields: any, files: Files) => {
     if (err) {
-      console.error('❌ Parse error:', err);
+      console.error('❌ Fout bij inlezen formulier:', err);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ error: 'Parse error' }));
@@ -64,7 +65,9 @@ export default function handler(req: IncomingMessage, res: ServerResponse) {
       console.error('❌ Verwerkingsfout:', e);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: e.message || 'Interne fout' }));
+      res.end(
+        JSON.stringify({ error: e?.message || 'Er ging iets mis bij het verwerken' })
+      );
     }
   });
 }

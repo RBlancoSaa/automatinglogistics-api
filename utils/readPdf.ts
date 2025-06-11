@@ -1,5 +1,10 @@
-export async function parsePDFtoEasy(tempPath: string, outputDir: string) {
-  const bestandsnaam = `dummy-${Date.now()}.easy`;
-  const referentie = 'DUMMY-123456';
-  return { bestandsnaam, referentie };
+export async function parsePDFtoEasy(
+  pdfPath: string,
+  outputDir: string
+): Promise<{ bestandsnaam: string; referentie: string }> {
+  // Simulatie
+  return {
+    bestandsnaam: 'voorbeeld.easy',
+    referentie: 'OE2517768',
+  };
 }
