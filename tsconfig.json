@@ -2,13 +2,18 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",
-    "rootDir": "src",
     "outDir": "dist",
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",              
+    "paths": {
+      "*": ["api/*", "src/*", "*"]
+    }
   },
-  "include": ["src/**/*", "api/sendViaSMTP.ts", "api/readPdf.ts"],
-  "exclude": ["dist"]
+  "include": ["api/**/*", "src/**/*"],
+  "exclude": ["dist", "node_modules"]
 }
